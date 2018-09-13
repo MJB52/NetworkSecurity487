@@ -35,7 +35,7 @@ namespace NetworkSecurityTools
         {
             //split line by whitespace, look for keywords in each index
             string[] parsed = BreakLine(line);
-            if (parsed[0] != "")
+            if (parsed.Length != 0)
             {
                 if (parsed[0].ToLower() == "ic")
                 {
@@ -61,7 +61,9 @@ namespace NetworkSecurityTools
             DisplayHelp();
             return "";
         }
+
         public string[] BreakLine(string line) => line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
         public void HandleEncrypt(string[] line)
         {
             string message, key;
