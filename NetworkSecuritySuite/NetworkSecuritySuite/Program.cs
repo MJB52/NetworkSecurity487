@@ -8,7 +8,7 @@ namespace NetworkSecurityTools
         {
             Menu menu = new Menu();
             string choice = menu.GetChoice();
-            Console.WriteLine("This is a not a test");
+            Console.WriteLine("This is not a test");
             while(choice != "exit")
             {
                choice = menu.GetChoice();
