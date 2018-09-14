@@ -14,8 +14,13 @@ namespace NetworkSecurityTools
         //read string from file given name
         public static string FileRead(string fileName)
         {
-            string fileContents = File.ReadAllText(fileName);
-            fileContents.RemoveWhiteSpace();
+            string fileContents = "";
+            fileName = @"../../../" + fileName;
+            if (ValidateFile(fileName))
+            {
+                fileContents = File.ReadAllText(fileName);
+                fileContents.RemoveWhiteSpace();
+            }
             return fileContents;
         }
         private static bool ValidateFile(string fileName)
