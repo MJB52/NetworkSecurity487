@@ -8,7 +8,7 @@ using System.Text;
 /// </summary>
 namespace NetworkSecuritySuite
 {
-    static class Ouput
+    public static class Ouput
     {
         static public void DisplayText(string message)
         {
@@ -16,17 +16,17 @@ namespace NetworkSecuritySuite
             int choice = Int32.Parse(Console.ReadLine());
             if (choice == 1)
             {
-                DisplayBlock(message);
+                message.DisplayBlock();
                 return;
             }
             else if (choice == 2)
             {
-                DisplayFormattedColumns(message);
+                message.DisplayFormattedColumns();
             }
         }
-        static private void DisplayFormattedColumns(string message)
+        static public void DisplayFormattedColumns(this string value)
         {
-            char[] chars = message.ToCharArray();
+            char[] chars = value.ToCharArray();
             int i = 0, width = 0, chunk = 0;
 
             Console.WriteLine("What is your specified column width: ");
@@ -34,7 +34,7 @@ namespace NetworkSecuritySuite
 
             try
             {
-                while (i < message.Length)
+                while (i < value.Length)
                 {
                     while (chunk < width)
                     {
@@ -51,9 +51,9 @@ namespace NetworkSecuritySuite
                 Console.WriteLine("There was an error: " + ex.Message);
             }
         }
-        static private void DisplayBlock(string message)
+        static public void DisplayBlock(this string value)
         {
-            Console.WriteLine(message);
+            Console.WriteLine(value);
         }
     }
 }

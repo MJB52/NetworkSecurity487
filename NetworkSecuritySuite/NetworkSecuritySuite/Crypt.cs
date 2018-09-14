@@ -8,7 +8,7 @@ using System.Text;
 ///                          to work with. 
 /// This code was developed by Justin Glenn and Michael Bauer and is not copied from an outside source
 /// </summary>
-namespace NetworkSecurityTools
+namespace NetworkSecuritySuite
 {
     static class Crypt
     {

@@ -7,7 +7,7 @@ using System.IO;
 ///                     an extension to the string class to remove all whitespace from a string. 
 /// This code was developed by Justin Glenn and Michael Bauer and is not copied from an outside source
 /// </summary>
-namespace NetworkSecurityTools
+namespace NetworkSecuritySuite
 {
     static class FileHandler
     {
