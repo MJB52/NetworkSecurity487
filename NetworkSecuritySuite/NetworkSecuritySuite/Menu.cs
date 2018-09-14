@@ -24,7 +24,7 @@ namespace NetworkSecurityTools
         {
             string ioc = "ic";
             string encrypt = "encrypt";
-            string decrypt = "encrypt -b";
+            string decrypt = "encrypt -d";
             //string help = "help";
             //Display List of Commands
             Console.WriteLine("The valid commands are\n\t{0} |optionally can be followed by a filename" +
@@ -66,13 +66,11 @@ namespace NetworkSecurityTools
 
         public void HandleEncrypt(string[] line)
         {
-            string message, key;
+            string message, key, flag = "e";
             if(line.Length != 3)
             {
-                Console.WriteLine("Enter the text to be encrypted: ");
-                message = Console.ReadLine();
-                Console.WriteLine("Enter the key to use for encryption: ");
-                key = Console.ReadLine();
+                message = GetMessage(flag);
+                key = GetKey(flag);
             }
             else{
                 message = FileHandler.FileRead(line[1]);
@@ -84,13 +82,11 @@ namespace NetworkSecurityTools
         }
         public void HandleDecrypt(string [] line)
         {
-            string message, key;
+            string message, key, flag = "d";
             if (line.Length != 4)
             {
-                Console.WriteLine("Enter the text to be decrypted: ");
-                message = Console.ReadLine();
-                Console.WriteLine("Enter the key to use for decryption: ");
-                key = Console.ReadLine();
+                message = GetMessage(flag);
+                key = GetKey(flag);
             }
             else
             {
@@ -115,7 +111,23 @@ namespace NetworkSecurityTools
             }
             Console.WriteLine("Index of Coincedence for data in {0} = {1}",fileName, IoC);
         }
-        
+        public string GetKey(string flag)
+        {
+            string type = "encryption";
+            if (flag == "d")
+                type = "decryption";
+            Console.Write("Enter the key to use for {0}: ", type);
+            return Console.ReadLine().ToLower();
 
+        }
+        public string GetMessage(string flag)
+        {
+            string type = "encrypted";
+            if (flag == "d")
+                type = "decrypted";
+            Console.Write("Enter the text to be {0}: ", type);
+            return Console.ReadLine();
+
+        }
     }
 }
