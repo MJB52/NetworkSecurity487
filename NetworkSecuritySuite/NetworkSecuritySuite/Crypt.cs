@@ -20,8 +20,8 @@ namespace NetworkSecuritySuite
         {
             int[] charMessage = ConvertToInt(message.ToLower());
             int[] charKey = ConvertToInt(key.ToLower());
-            int keyLenCount = 0;
             int[] DecryptedMessage = new int[message.Length];
+            int keyLenCount = 0;
             int storeLetter;
             for (int i = 0; i < message.Length; i++)
             {
@@ -42,8 +42,8 @@ namespace NetworkSecuritySuite
         {
             int [] charMessage = ConvertToInt(message.ToLower());
             int [] charKey = ConvertToInt(key.ToLower());
-            int keyLenCount = 0;
             int[] EncryptedMessage = new int[message.Length];
+            int keyLenCount = 0;
             int storeLetter = 0;
             for(int i = 0; i < message.Length; i++)
             {
