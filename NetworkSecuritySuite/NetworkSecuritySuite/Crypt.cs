@@ -8,7 +8,7 @@ using System.Text;
 ///                          to work with. 
 /// This code was developed by Justin Glenn and Michael Bauer and is not copied from an outside source
 /// </summary>
-namespace NetworkSecurityTools
+namespace NetworkSecuritySuite
 {
     static class Crypt
     {
@@ -18,15 +18,17 @@ namespace NetworkSecurityTools
         }
         public static string Decrypt(string message, string key)
         {
-            message = message.ToLower();
-            int keyLenCount = 0;
+            int[] charMessage = ConvertToInt(message.ToLower());
+            int[] charKey = ConvertToInt(key.ToLower());
             int[] DecryptedMessage = new int[message.Length];
+            int keyLenCount = 0;
             int storeLetter;
             for (int i = 0; i < message.Length; i++)
             {
                 if (keyLenCount > key.Length - 1)
                     keyLenCount = 0;
-                storeLetter = (message[i] - 97) - (key[keyLenCount] - 97); //subtract key from cipher  
+                // storeLetter = (message[i] - 97) - (key[keyLenCount] - 97); //subtract key from cipher  
+                storeLetter = charMessage[i] - charKey[keyLenCount];
                 if (storeLetter < 0)
                     storeLetter += 26;      // sometimes storeLetter could be less than zero..in this case all that needs to be done is add 26
                 //converttostring -> write to file
@@ -38,9 +40,10 @@ namespace NetworkSecurityTools
         //encyrypt is very similar to decrypt with the exception that it adds the message and the key and then is modded by 26
         public static string Encrypt(string message, string key)
         {
-            message = message.ToLower();
-            int keyLenCount = 0;
+            int [] charMessage = ConvertToInt(message.ToLower());
+            int [] charKey = ConvertToInt(key.ToLower());
             int[] EncryptedMessage = new int[message.Length];
+            int keyLenCount = 0;
             int storeLetter = 0;
             for(int i = 0; i < message.Length; i++)
             {
@@ -48,7 +51,8 @@ namespace NetworkSecurityTools
                 {
                     keyLenCount = 0;
                 }
-                storeLetter = (message[i] - 97) + (key[keyLenCount] - 97); //add key to plaintext 
+                //storeLetter = (message[i] - 97) + (key[keyLenCount] - 97); //add key to plaintext 
+                storeLetter = charMessage[i] + charKey[keyLenCount];
                 if (storeLetter > 25)
                 {
                     storeLetter = storeLetter % 26;

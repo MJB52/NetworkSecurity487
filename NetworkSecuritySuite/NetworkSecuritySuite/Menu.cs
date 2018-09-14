@@ -7,7 +7,7 @@ using System.Text;
 /// Class Description: this class is our menu class. it grabs user input and depending on that input will process text a certain way
 /// This code was developed by Justin Glenn and Michael Bauer and is not copied from an outside source
 /// </summary>
-namespace NetworkSecurityTools
+namespace NetworkSecuritySuite
 {
     class Menu
     {
@@ -76,11 +76,12 @@ namespace NetworkSecurityTools
                 message = GetMessage(flag);
                 key = GetKey(flag);
             }
-            else{
+            else
+            {
                 message = FileHandler.FileRead(line[1]);
                 key = FileHandler.FileRead(line[2]);
             }
-            Console.WriteLine(Crypt.Encrypt(message, key));
+            Crypt.Encrypt(message, key).DisplayBlock();
 
             
         }
@@ -97,7 +98,7 @@ namespace NetworkSecurityTools
                 message = FileHandler.FileRead(line[2]);
                 key = FileHandler.FileRead(line[3]).ToLower();
             }
-            Console.WriteLine(Crypt.Decrypt(message, key));
+            Crypt.Decrypt(message, key).DisplayBlock();
         }
         public void HandleIC(string [] line)
         {
