@@ -24,7 +24,7 @@ namespace NetworkSecuritySuite
             if (ValidateFile(fileName))
             {
                 fileContents = File.ReadAllText(fileName);
-                fileContents.RemoveWhiteSpace();
+                fileContents.RemoveWhiteSpace().ToLower();
             }
             return fileContents;
         }

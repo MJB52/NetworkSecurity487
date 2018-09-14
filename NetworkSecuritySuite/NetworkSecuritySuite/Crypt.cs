@@ -18,7 +18,8 @@ namespace NetworkSecuritySuite
         }
         public static string Decrypt(string message, string key)
         {
-            message = message.ToLower();
+            int[] charMessage = ConvertToInt(message.ToLower());
+            int[] charKey = ConvertToInt(key.ToLower());
             int keyLenCount = 0;
             int[] DecryptedMessage = new int[message.Length];
             int storeLetter;
@@ -26,7 +27,8 @@ namespace NetworkSecuritySuite
             {
                 if (keyLenCount > key.Length - 1)
                     keyLenCount = 0;
-                storeLetter = (message[i] - 97) - (key[keyLenCount] - 97); //subtract key from cipher  
+                // storeLetter = (message[i] - 97) - (key[keyLenCount] - 97); //subtract key from cipher  
+                storeLetter = charMessage[i] - charKey[keyLenCount];
                 if (storeLetter < 0)
                     storeLetter += 26;      // sometimes storeLetter could be less than zero..in this case all that needs to be done is add 26
                 //converttostring -> write to file
@@ -38,7 +40,8 @@ namespace NetworkSecuritySuite
         //encyrypt is very similar to decrypt with the exception that it adds the message and the key and then is modded by 26
         public static string Encrypt(string message, string key)
         {
-            message = message.ToLower();
+            int [] charMessage = ConvertToInt(message.ToLower());
+            int [] charKey = ConvertToInt(key.ToLower());
             int keyLenCount = 0;
             int[] EncryptedMessage = new int[message.Length];
             int storeLetter = 0;
@@ -48,7 +51,8 @@ namespace NetworkSecuritySuite
                 {
                     keyLenCount = 0;
                 }
-                storeLetter = (message[i] - 97) + (key[keyLenCount] - 97); //add key to plaintext 
+                //storeLetter = (message[i] - 97) + (key[keyLenCount] - 97); //add key to plaintext 
+                storeLetter = charMessage[i] + charKey[keyLenCount];
                 if (storeLetter > 25)
                 {
                     storeLetter = storeLetter % 26;
