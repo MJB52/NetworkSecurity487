@@ -76,11 +76,12 @@ namespace NetworkSecuritySuite
                 message = GetMessage(flag);
                 key = GetKey(flag);
             }
-            else{
+            else
+            {
                 message = FileHandler.FileRead(line[1]);
                 key = FileHandler.FileRead(line[2]);
             }
-            Crypt.Encrypt(message, key).DisplayBlock(); ;
+            Crypt.Encrypt(message, key).DisplayBlock();
 
             
         }
