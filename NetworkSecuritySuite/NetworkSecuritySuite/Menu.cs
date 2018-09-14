@@ -91,7 +91,7 @@ namespace NetworkSecurityTools
             else
             {
                 message = FileHandler.FileRead(line[2]);
-                key = FileHandler.FileRead(line[3]).ToLower(); ;
+                key = FileHandler.FileRead(line[3]).ToLower();
             }
             Console.WriteLine(Crypt.Decrypt(message, key));
         }
