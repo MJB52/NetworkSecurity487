@@ -2,7 +2,11 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
-
+/// <summary>
+/// NAMES: Justin Glenn and Michael Bauer
+/// Class Description: this class is our menu class. it grabs user input and depending on that input will process text a certain way
+/// This code was developed by Justin Glenn and Michael Bauer and is not copied from an outside source
+/// </summary>
 namespace NetworkSecurityTools
 {
     class Menu

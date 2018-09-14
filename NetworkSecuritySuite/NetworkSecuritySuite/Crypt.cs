@@ -1,7 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+/// <summary>
+/// NAMES: Justin Glenn and Michael Bauer
+/// Class Description: this class is responsible for encrypting, decrypting, and finding IoC of a block of text. 
+///                        it contains a lookup table so that chars can easily be converted to ints and back as ints are easier
+///                          to work with. 
+/// This code was developed by Justin Glenn and Michael Bauer and is not copied from an outside source
+/// </summary>
 namespace NetworkSecurityTools
 {
     static class Crypt
@@ -20,15 +26,16 @@ namespace NetworkSecurityTools
             {
                 if (keyLenCount > key.Length - 1)
                     keyLenCount = 0;
-                storeLetter = (message[i] - 97) - (key[keyLenCount] - 97);
+                storeLetter = (message[i] - 97) - (key[keyLenCount] - 97); //subtract key from cipher  
                 if (storeLetter < 0)
-                    storeLetter += 26;
+                    storeLetter += 26;      // sometimes storeLetter could be less than zero..in this case all that needs to be done is add 26
                 //converttostring -> write to file
                 DecryptedMessage[i] = storeLetter;
                 keyLenCount++;
             }
             return ConvertToString(DecryptedMessage);
         }
+        //encyrypt is very similar to decrypt with the exception that it adds the message and the key and then is modded by 26
         public static string Encrypt(string message, string key)
         {
             message = message.ToLower();
@@ -41,7 +48,7 @@ namespace NetworkSecurityTools
                 {
                     keyLenCount = 0;
                 }
-                storeLetter = (message[i] - 97) + (key[keyLenCount] - 97);
+                storeLetter = (message[i] - 97) + (key[keyLenCount] - 97); //add key to plaintext 
                 if (storeLetter > 25)
                 {
                     storeLetter = storeLetter % 26;
@@ -55,7 +62,7 @@ namespace NetworkSecurityTools
         public static float GetIOC(string cipherText)
         {
             float total = 0;
-            int[] letterCounter = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            int[] letterCounter = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; //each index kind of represents a index in alphabet
             //converttoint -> 
             cipherText = cipherText.ToLowerInvariant();
             int[] message = ConvertToInt(cipherText);
@@ -63,11 +70,11 @@ namespace NetworkSecurityTools
             //Lookup letter;
             for(int i = 0; i < message.Length; i++)
             {
-                letterCounter[message[i]]++;
+                letterCounter[message[i]]++;    //since message is an int array used like a char array we can actually use message to index our counter
             }
             foreach(int instance in letterCounter)
             {
-                total += instance * (instance - 1);
+                total += instance * (instance - 1);     
             }
             return total / (cipherText.Length * (cipherText.Length - 1));
             

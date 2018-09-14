@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.IO;
-
+/// <summary>
+/// NAMES: Justin Glenn and Michael Bauer
+/// Class Description: this class is responsible for opening files and sending the data elsewhere. It also containts
+///                     an extension to the string class to remove all whitespace from a string. 
+/// This code was developed by Justin Glenn and Michael Bauer and is not copied from an outside source
+/// </summary>
 namespace NetworkSecurityTools
 {
     static class FileHandler
     {
-        //write string to file given name
+        //write string to file given name not implemented yet but maybe will be used in future..if not - remove
         public static void FileWrite(string message, string fileName)
         {
 
@@ -42,7 +47,7 @@ namespace NetworkSecurityTools
             return value.ToCharArray()
                         .Where(c => !char.IsWhiteSpace(c))//return c where c is not white space
                         .Select(c => c.ToString()) //return c as a string
-                        .Aggregate((a, c) => a + c); //add c to the existing string where a is the existing string and c is the char to be added
+                        .Aggregate((existing, c) => existing + c); //add c to the existing string where existing is the existing string and c is the char to be added
         }
     }
 }
