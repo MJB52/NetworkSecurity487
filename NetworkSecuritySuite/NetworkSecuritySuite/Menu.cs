@@ -91,18 +91,17 @@ namespace NetworkSecurityTools
             else
             {
                 message = FileHandler.FileRead(line[2]);
-                key = FileHandler.FileRead(line[3]);
+                key = FileHandler.FileRead(line[3]).ToLower(); ;
             }
             Console.WriteLine(Crypt.Decrypt(message, key));
         }
         public void HandleIC(string [] line)
         {
             float IoC = 0;
-            string fileName;
+            string fileName = "ciphertext.txt";
             if(line.Length == 1)
             {
-                IoC = Crypt.GetIOC(FileHandler.FileRead("ciphertext.txt"));
-                fileName = "ciphertext.txt";
+                IoC = Crypt.GetIOC(FileHandler.FileRead(fileName));
             }
             else
             {
