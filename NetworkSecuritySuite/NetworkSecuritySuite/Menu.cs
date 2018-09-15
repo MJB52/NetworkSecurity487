@@ -102,7 +102,7 @@ namespace NetworkSecuritySuite
         }
         public void HandleIC(string [] line)
         {
-            float IoC = 0;
+            double IoC = 0;
             string fileName = "ciphertext.txt";
             if(line.Length == 1)
             {
