@@ -37,6 +37,7 @@ namespace NetworkSecuritySuite
             }
             return ConvertToString(DecryptedMessage);
         }
+
         //encyrypt is very similar to decrypt with the exception that it adds the message and the key and then is modded by 26
         public static string Encrypt(string message, string key)
         {

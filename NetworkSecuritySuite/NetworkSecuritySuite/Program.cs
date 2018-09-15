@@ -11,6 +11,8 @@ namespace NetworkSecuritySuite
         static void Main()
         {
             Menu menu = new Menu();
+            string message = "SWUOEFQEKRYHHQYDSBGETAEVSUWAPKWPDKEHTRRPSCAPMFKAUMGCB";
+            Output.DisplayText(message, 5);
             string choice = menu.GetChoice();
             //Console.WriteLine("This is actually a test boi");
             while(choice != "exit")
