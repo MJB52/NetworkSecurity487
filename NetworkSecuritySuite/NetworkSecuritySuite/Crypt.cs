@@ -93,7 +93,7 @@ namespace NetworkSecuritySuite
             int keyCount = 0;
             //int letterCount = 0;
             string[] keysColumn = new string[KeyLength];    
-            string[] likelyKeys = new string[3];        //holds suggested keys
+            string[] likelyKeys = new string[3];        //holds suggested keys..holds 3 keys..could change to more or less
             string[] column = CreateColumns(CipherText, KeyLength); //gets ciphertext into specified columns
             string[] decrypted = new string[26];        //holds each decrypted line 
             foreach(string line in column)
