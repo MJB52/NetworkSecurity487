@@ -124,7 +124,7 @@ namespace NetworkSecuritySuite
             //double[] total = new double[message.Length];
             char[] arr = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
             double freq;
-            double total1 = 0 /*most likely key for this column*/, total2 = 0/*2nd most likely*/, total3 = 0;/*3rd most likely*/
+            double total1 = 0, /*most likely key for this column*/ total2 = 0, /*2nd most likely*/ total3 = 0; /*3rd most likely*/
             int count = 0;
             //int linecount = 0;
             foreach(string line in message)
