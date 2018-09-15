@@ -24,7 +24,7 @@ namespace NetworkSecuritySuite
             if (ValidateFile(fileName))
             {
                 fileContents = File.ReadAllText(fileName);
-                fileContents.RemoveWhiteSpace().ToLower();
+                fileContents.RemoveWhiteSpace().RemoveNonChars().ToLower();
             }
             return fileContents;
         }
@@ -48,6 +48,17 @@ namespace NetworkSecuritySuite
                         .Where(c => !char.IsWhiteSpace(c))//return c where c is not white space
                         .Select(c => c.ToString()) //return c as a string
                         .Aggregate((existing, c) => existing + c); //add c to the existing string where existing is the existing string and c is the char to be added
+        }
+        public static string RemoveNonChars(this string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return value;
+            }
+            return value.ToCharArray()
+                        .Where(c => !char.IsLetter(c))
+                        .Select(c => c.ToString())
+                        .Aggregate((existing, c) => existing + c);
         }
     }
 }
