@@ -39,6 +39,7 @@ namespace NetworkSecuritySuite
                 "              \n\t{3} |optionally can be followed by filename and a keylength" +
                 "              \n\t{4} |optionally can be followed by a filename", ioc, encrypt, decrypt, suggestKeys, display);
         }
+
         public string ProcessInput(string line)
         {
             //split line by whitespace, look for keywords in each index
@@ -79,6 +80,7 @@ namespace NetworkSecuritySuite
         }
 
         public string[] BreakLine(string line) => line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
         private void HandleSuggestKeys(string [] line)//TODO: discuss what we want user to pass in..file name, filename + keylength? if no keylength is given then ask
         {                                             //       if they would like to specify one or use a suggested one. if no filename is given ask for a block of text
             string flag = "k";
@@ -127,8 +129,8 @@ namespace NetworkSecuritySuite
                 string message = GetMessage(flag);
                 Output.DisplayText(message);
             }
-
         }
+
         private void HandleEncrypt(string[] line)
         {
             string message, key, flag = "e";
@@ -151,9 +153,8 @@ namespace NetworkSecuritySuite
                 Crypt.Encrypt(message, key).DisplayBlock();
             else
                 Console.WriteLine("Message could not be encrypted");
-
-            
         }
+
         private void HandleDecrypt(string [] line)
         {
             string message, key, flag = "d";
@@ -174,6 +175,7 @@ namespace NetworkSecuritySuite
             }
             Crypt.Decrypt(message, key).DisplayBlock();
         }
+
         private void HandleIC(string [] line)
         {
             double IoC = 0;
@@ -189,6 +191,7 @@ namespace NetworkSecuritySuite
             }
             Console.WriteLine("Index of Coincedence for data in {0} = {1}",fileName, IoC);
         }
+
         private string GetKey(string flag)
         {
             string type = "encryption";
@@ -198,6 +201,7 @@ namespace NetworkSecuritySuite
             return Console.ReadLine().ToLower();
 
         }
+
         private string GetMessage(string flag)
         {
             string encrypt = "encrypted";
@@ -215,7 +219,6 @@ namespace NetworkSecuritySuite
                 type = display;
             Console.Write("Enter the text to be {0}: ", type);
             return Console.ReadLine();
-
         }
     }
 }
