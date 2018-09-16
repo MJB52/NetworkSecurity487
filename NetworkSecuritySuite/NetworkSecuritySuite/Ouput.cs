@@ -10,7 +10,7 @@ namespace NetworkSecuritySuite
 {
     public static class Output
     {
-        static public void DisplayText(string message, int keylength)
+        static public void DisplayText(string message, int keylength = 5)//added default value for now until we have suggested keylength implemented
         {
             Console.Write("Would you like to display a block of text(1), display chunks of speicific width(2), or display columns with ciphertext and plaintext(3): ");
             int choice = Int32.Parse(Console.ReadLine());
@@ -60,7 +60,7 @@ namespace NetworkSecuritySuite
             Console.WriteLine(value);
         }
 
-        static public void DisplayPartialColumns(this string value, int keylength)
+        static public void DisplayPartialColumns(this string value, int keylength) 
         {
             char[] chars = value.ToCharArray();
             int i = 0, j = 0, width = 0, chunk = 0;

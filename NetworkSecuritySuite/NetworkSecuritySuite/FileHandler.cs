@@ -26,14 +26,14 @@ namespace NetworkSecuritySuite
                 fileContents = File.ReadAllText(fileName);
                 fileContents.RemoveWhiteSpace().RemoveNonChars().ToLower();
             }
-            return fileContents;
+            return fileContents.RemoveWhiteSpace().RemoveNonChars().ToLower();
         }
         private static bool ValidateFile(string fileName)
         {
             if (File.Exists(fileName))
                 return true;
             else
-                Console.WriteLine("Invalid file name.");
+                Console.WriteLine("Invalid file name: {0}" , fileName);
             return false;
         }
         //not really part of filehandling but don't want a new class for one method yet
@@ -56,7 +56,7 @@ namespace NetworkSecuritySuite
                 return value;
             }
             return value.ToCharArray()
-                        .Where(c => !char.IsLetter(c))
+                        .Where(c => char.IsLetter(c))
                         .Select(c => c.ToString())
                         .Aggregate((existing, c) => existing + c);
         }

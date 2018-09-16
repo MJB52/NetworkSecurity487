@@ -29,12 +29,17 @@ namespace NetworkSecuritySuite
             string ioc = "ic";
             string encrypt = "encrypt";
             string decrypt = "encrypt -d";
+            string suggestKeys = "keys";
+            string display = "display";
             //string help = "help";
             //Display List of Commands
             Console.WriteLine("The valid commands are\n\t{0} |optionally can be followed by a filename" +
                 "              \n\t{1} |optionally can be followed by 2 filenames" +
-                "              \n\t{2} |optionally can be follwed by 2 filenames" , ioc, encrypt, decrypt);
+                "              \n\t{2} |optionally can be follwed by 2 filenames"  +
+                "              \n\t{3} |optionally can be followed by filename and a keylength" +
+                "              \n\t{4} |optionally can be followed by a filename", ioc, encrypt, decrypt, suggestKeys, display);
         }
+
         public string ProcessInput(string line)
         {
             //split line by whitespace, look for keywords in each index
@@ -54,6 +59,14 @@ namespace NetworkSecuritySuite
                     else
                         HandleEncrypt(parsed);
                 }
+                else if (parsed[0].ToLower() == "keys")
+                {
+                    HandleSuggestKeys(parsed);
+                }
+                else if (parsed[0].ToLower() == "display")
+                {
+                    HandleDisplay(parsed);
+                }
                 else if (parsed[0].ToLower() == "exit")
                 {
 
@@ -68,39 +81,102 @@ namespace NetworkSecuritySuite
 
         public string[] BreakLine(string line) => line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-        public void HandleEncrypt(string[] line)
+        private void HandleSuggestKeys(string [] line)//TODO: discuss what we want user to pass in..file name, filename + keylength? if no keylength is given then ask
+        {                                             //       if they would like to specify one or use a suggested one. if no filename is given ask for a block of text
+            string flag = "k";
+            int keyLength;
+            string choice;
+            if (line.Length == 3)
+            {
+                Crypt.GetSuggestedKey(FileHandler.FileRead(line[1]), Convert.ToInt32(line[2]));
+            }
+            else if (line.Length == 2)
+            {
+                Console.Write("Would you like to specify a key length(1) or let the program generate one(2)? ");
+                choice = Console.ReadLine();
+                if (choice == "1")
+                {
+                    Console.Write("Enter a key length to be used for suggesting keys: ");
+                    keyLength = Convert.ToInt32(Console.ReadLine());
+                }
+                else
+                    keyLength = 5; //TODO: REALLY DO THIS: Change to "GetSuggestedKeyLength" when we get it implemented;
+                Crypt.GetSuggestedKey(FileHandler.FileRead(line[1]), keyLength);
+            }
+            else {
+                Console.Write("Would you like to specify a key length(1) or let the program generate one(2)? ");
+                choice = Console.ReadLine();
+                if (choice == "1")
+                {
+                    Console.Write("Enter a key length to be used for suggesting keys: ");
+                    keyLength = Convert.ToInt32(Console.ReadLine());
+                }
+                else
+                    keyLength = 5; //TODO: REALLY DO THIS: Change to "GetSuggestedKeyLength" when we get it implemented;
+                Crypt.GetSuggestedKey(GetMessage(flag), keyLength);
+                }
+        }
+        public void HandleDisplay(string [] line) //TODO: discuss what we want user to pass in..file name, filename+ keylength? or not since we ask for it already?
+                                                  //       maybe just allow filename or nothing 
+        {
+            string flag = "d";
+            if(line.Length == 2)
+            {
+                Output.DisplayText(FileHandler.FileRead(line[1]));
+            }
+            else
+            {
+                string message = GetMessage(flag);
+                Output.DisplayText(message);
+            }
+        }
+
+        private void HandleEncrypt(string[] line)
         {
             string message, key, flag = "e";
-            if(line.Length != 3)
+            if(line.Length == 1)
             {
                 message = GetMessage(flag);
                 key = GetKey(flag);
             }
-            else
+            else if(line.Length == 2)
             {
                 message = FileHandler.FileRead(line[1]);
-                key = FileHandler.FileRead(line[2]);
-            }
-            Crypt.Encrypt(message, key).DisplayBlock();
-
-            
-        }
-        public void HandleDecrypt(string [] line)
-        {
-            string message, key, flag = "d";
-            if (line.Length != 4)
-            {
-                message = GetMessage(flag);
                 key = GetKey(flag);
             }
             else
             {
+                message = GetMessage(flag);
+                key = GetKey(flag);
+            }
+            if (message != null && key != null)
+                Crypt.Encrypt(message, key).DisplayBlock();
+            else
+                Console.WriteLine("Message could not be encrypted");
+        }
+
+        private void HandleDecrypt(string [] line)
+        {
+            string message, key, flag = "d";
+            if (line.Length == 2)
+            {
+                message = GetMessage(flag);
+                key = GetKey(flag);
+            }
+            else if(line.Length == 3)
+            {
                 message = FileHandler.FileRead(line[2]);
-                key = FileHandler.FileRead(line[3]).ToLower();
+                key = GetKey(flag);
+            }
+            else
+            {
+                message = GetMessage(flag);
+                key = GetKey(flag);
             }
             Crypt.Decrypt(message, key).DisplayBlock();
         }
-        public void HandleIC(string [] line)
+
+        private void HandleIC(string [] line)
         {
             double IoC = 0;
             string fileName = "ciphertext.txt";
@@ -115,7 +191,8 @@ namespace NetworkSecuritySuite
             }
             Console.WriteLine("Index of Coincedence for data in {0} = {1}",fileName, IoC);
         }
-        public string GetKey(string flag)
+
+        private string GetKey(string flag)
         {
             string type = "encryption";
             if (flag == "d")
@@ -124,14 +201,24 @@ namespace NetworkSecuritySuite
             return Console.ReadLine().ToLower();
 
         }
-        public string GetMessage(string flag)
+
+        private string GetMessage(string flag)
         {
-            string type = "encrypted";
+            string encrypt = "encrypted";
+            string decrypt = "decrypted";
+            string key = "used for finding keys";
+            string display = "displayed";
+            string type;
             if (flag == "d")
-                type = "decrypted";
+                type = decrypt;
+            else if (flag == "e")
+                type = encrypt;
+            else if (flag == "k")
+                type = key;
+            else
+                type = display;
             Console.Write("Enter the text to be {0}: ", type);
             return Console.ReadLine();
-
         }
     }
 }

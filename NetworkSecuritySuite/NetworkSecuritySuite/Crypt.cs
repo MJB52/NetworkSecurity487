@@ -88,80 +88,89 @@ namespace NetworkSecuritySuite
             
         }
 
-        public static void GetSuggestedKeys(string CipherText, int KeyLength)
+        public static void GetSuggestedKey(string CipherText, int KeyLength)
         {
             int count = 0;
-            int keyCount = 0;
-            //int letterCount = 0;
-            string[] keysColumn = new string[KeyLength];    
-            string[] likelyKeys = new string[3];        //holds suggested keys..holds 3 keys..could change to more or less
+            string key = "";
             string[] column = CreateColumns(CipherText, KeyLength); //gets ciphertext into specified columns
             string[] decrypted = new string[26];        //holds each decrypted line 
-            foreach(string line in column)
+            foreach (string line in column)
             {
-                for(char letter = 'a'; letter <= 'z'; letter++)
-                { 
+                for (char letter = 'a'; letter <= 'z'; letter++)
+                {
                     decrypted[count] = Decrypt(line, letter.ToString());    //decrypts column26 times for each letter
-                    count++; 
+                    count++;
                 }
-                keysColumn[keyCount] = GetLikelyKeys(decrypted);    //send array of decrypted strings to get likely keys
-                Console.WriteLine(keysColumn[keyCount].ToString());
-                keyCount++;
+                key += FindKeyForColumn(decrypted);
                 count = 0;
             }
-            for (int i = 0; i < likelyKeys.Length; i++)
-            {
-                likelyKeys[i] += (keysColumn[0][i] + keysColumn[1][i].ToString() + keysColumn[2][i].ToString() + keysColumn[3][i].ToString() + keysColumn[4][i].ToString()).ToUpper(); //assign Ith char to likelykeys
-            }
-            foreach(string key in likelyKeys)
-                Console.WriteLine(key);
-        }       
-                                           //each line contains a plaintext message decrypted using each letter of alphabet
-        private static string GetLikelyKeys(string [] message)
+            Console.WriteLine(key);
+            //int count = 0;
+            //string [] colKey = new string[3];
+            //string[] keys = new string[3];
+            //string[] column = CreateColumns(CipherText, KeyLength); //gets ciphertext into specified columns
+            //string[] decrypted = new string[26];        //holds each decrypted line 
+            //foreach (string line in column)
+            //{
+            //    for (char letter = 'a'; letter <= 'z'; letter++)
+            //    {
+            //        decrypted[count] = Decrypt(line, letter.ToString());    //decrypts column26 times for each letter
+            //        count++;
+            //    }
+            //    colKey = FindKeyForColumn(decrypted);
+            //    for(int i = 0; i < keys.Length; i++)
+            //    {
+            //        keys[i] += colKey[i];
+            //    }
+            //    count = 0;
+            //}
+            //foreach(string key in keys)
+            //    Console.WriteLine(key);
+        }
+        //each line contains a plaintext message decrypted using each letter of alphabet
+        private static string FindKeyForColumn(string[] message)
+        //private static string[] FindKeyForColumn(string [] message)
         {
-            char [] LikelyKeys = new char[3];
-            //string LikelyKeys = "   ";
-            //int[] MessageAsInt = new int[message[0].Length];
-            //double[] total = new double[message.Length];
+            string LikelyKey = "";
             char[] arr = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-            double freq;
-            double total1 = 0, /*most likely key for this column*/ total2 = 0, /*2nd most likely*/ total3 = 0; /*3rd most likely*/
+            double freq, total = 0;
             int count = 0;
-            //int linecount = 0;
-            foreach(string line in message)
+            foreach (string line in message)
             {
-                //MessageAsInt = ConvertToInt(line);
-                // total[count] = FrequencyAnalysis(line);
-                freq = FrequencyAnalysis(line); //just gets double value based on the line
-                if (freq > total1)
+                freq = FrequencyAnalysis(line);
+                if (freq > total)
                 {
-                    total3 = total2;
-                    total2 = total1;
-                    total1 = freq;
-
-                    LikelyKeys[2] = LikelyKeys[1];
-                    LikelyKeys[1] = LikelyKeys[0];
-                    LikelyKeys[0] = arr[count];
+                    total = freq;
+                    LikelyKey = arr[count].ToString();
                 }
-                else if (freq < total1 && freq > total2)
-                {
-                    total3 = total2;
-                    total2 = freq;
-                    LikelyKeys[2] = LikelyKeys[1];
-                    LikelyKeys[1] = arr[count];
-                }
-                else if (freq < total2 && freq > total3)
-                {
-                    total3 = freq;
-                    LikelyKeys[2] = arr[count];
-                }
-                else
-                    continue;
                 count++;
             }
-            //Console.WriteLine(LikelyKeys);
-            return new string(LikelyKeys).ToLower();
+            return LikelyKey.ToUpper();
         }
+            //string[] LikelyKey = new string[3];
+            ////string tempKey;
+            //char[] arr = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+            //double freq, total = 0;
+            //int count = 0;
+            //foreach (string line in message)
+            //{
+            //    freq = FrequencyAnalysis(line);
+            //    if (freq > total)
+            //    {
+            //        total = freq;
+            //        for (int i = 0; i < LikelyKey.Length; i++)
+            //        {
+            //            for (int j = i - 1; j >= 0; j--)
+            //                LikelyKey[j] = LikelyKey[j+1];
+            //            LikelyKey[i] = arr[count].ToString();
+            //        }
+            //    }
+            //    //if (LikelyKey[] == null)
+            //    //    LikelyKey[1] = LikelyKey[0];
+            //    count++;
+        //}
+        //    return LikelyKey;
+        //}
         private static double FrequencyAnalysis(string message)
         {
             double total = 0;
