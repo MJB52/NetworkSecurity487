@@ -86,7 +86,7 @@ namespace NetworkSecuritySuite
             string choice;
             if (line.Length == 3)
             {
-                Crypt.GetSuggestedKeys(FileHandler.FileRead(line[1]), Convert.ToInt32(line[2]));
+                Crypt.GetSuggestedKey(FileHandler.FileRead(line[1]), Convert.ToInt32(line[2]));
             }
             else if (line.Length == 2)
             {
@@ -99,7 +99,7 @@ namespace NetworkSecuritySuite
                 }
                 else
                     keyLength = 5; //TODO: REALLY DO THIS: Change to "GetSuggestedKeyLength" when we get it implemented;
-                Crypt.GetSuggestedKeys(FileHandler.FileRead(line[1]), keyLength);
+                Crypt.GetSuggestedKey(FileHandler.FileRead(line[1]), keyLength);
             }
             else {
                 Console.Write("Would you like to specify a key length(1) or let the program generate one(2)? ");
@@ -111,7 +111,7 @@ namespace NetworkSecuritySuite
                 }
                 else
                     keyLength = 5; //TODO: REALLY DO THIS: Change to "GetSuggestedKeyLength" when we get it implemented;
-                Crypt.GetSuggestedKeys(GetMessage(flag), keyLength);
+                Crypt.GetSuggestedKey(GetMessage(flag), keyLength);
                 }
         }
         public void HandleDisplay(string [] line) //TODO: discuss what we want user to pass in..file name, filename+ keylength? or not since we ask for it already?
@@ -162,10 +162,15 @@ namespace NetworkSecuritySuite
                 message = GetMessage(flag);
                 key = GetKey(flag);
             }
-            else
+            else if(line.Length == 3)
             {
                 message = FileHandler.FileRead(line[2]);
-                key = FileHandler.FileRead(line[3]).ToLower();
+                key = GetKey(flag);
+            }
+            else
+            {
+                message = GetMessage(flag);
+                key = GetKey(flag);
             }
             Crypt.Decrypt(message, key).DisplayBlock();
         }
