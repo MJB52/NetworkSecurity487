@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -216,7 +217,8 @@ namespace NetworkSecuritySuite
             //    }
             //}
             List <int> value = new List<int>();
-            int count = 0;
+            int count = -1;
+            int temp = 0;
             for (int j = 2; j < 10; j++)
             {
                 Console.WriteLine("Here is each repeated string of {0} characters. ", j);
@@ -224,18 +226,22 @@ namespace NetworkSecuritySuite
                 {
                     if (pair.Value > 1)
                     {
-                        count = message.IndexOf(pair.Key, count);
-                        value.Add(count);
+                        //count = message.IndexOf(pair.Key, count);
+                        //value.Add(count);
                         Console.Write("{0}: {1} :  ", pair.Key, pair.Value);
                         for (int i = 0; i < pair.Value; i++)
                         {
-                            count = message.IndexOf(pair.Key, count);
+                            temp = message.IndexOf(pair.Key, count +1 );
+                            count = temp;
                             value.Add(count);
                         }
-                        count = 0;
-                        Console.Write(value + " ");
+                        count = -1;
+                        value.ForEach(c => Console.Write(c + " "));
+                        Console.Write(" | ");
+                        GetDifference(value);
                         Console.WriteLine();
                     }
+                    value.Clear();
                 }
             }
         }
@@ -257,6 +263,34 @@ namespace NetworkSecuritySuite
                     }
                 }
             }
+        }
+        private static void GetDifference(List <int> arr)
+        {
+            int temp;
+            HashSet<int> commonFactors = new HashSet<int>();
+            for(int i = 0; i < arr.Count - 1; i++)
+            {
+                temp = arr[i + 1] - arr[i];
+                Console.Write(temp + " ");
+                commonFactors.UnionWith(GetFactors(temp));
+            }
+            Console.Write(" | ");
+            foreach(int num in commonFactors)
+            {
+                Console.Write(num + " ");
+            }
+        }
+        private static HashSet<int> GetFactors(int value)
+        {
+            int temp = 1;
+            HashSet<int> factors = new HashSet<int>();
+            while (temp <= value)
+            {
+                if (value % temp == 0 && temp != 1 && temp != value)
+                    factors.Add(temp);
+                temp++;
+            }
+            return factors;
         }
     public static int[] ConvertToInt(string message)
         {
