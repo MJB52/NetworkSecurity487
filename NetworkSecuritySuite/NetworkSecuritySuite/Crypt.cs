@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 /// <summary>
@@ -107,31 +108,9 @@ namespace NetworkSecuritySuite
                 count = 0;
             }
             Console.WriteLine(key);
-            //int count = 0;
-            //string [] colKey = new string[3];
-            //string[] keys = new string[3];
-            //string[] column = CreateColumns(CipherText, KeyLength); //gets ciphertext into specified columns
-            //string[] decrypted = new string[26];        //holds each decrypted line 
-            //foreach (string line in column)
-            //{
-            //    for (char letter = 'a'; letter <= 'z'; letter++)
-            //    {
-            //        decrypted[count] = Decrypt(line, letter.ToString());    //decrypts column26 times for each letter
-            //        count++;
-            //    }
-            //    colKey = FindKeyForColumn(decrypted);
-            //    for(int i = 0; i < keys.Length; i++)
-            //    {
-            //        keys[i] += colKey[i];
-            //    }
-            //    count = 0;
-            //}
-            //foreach(string key in keys)
-            //    Console.WriteLine(key);
         }
         //each line contains a plaintext message decrypted using each letter of alphabet
         private static string FindKeyForColumn(string[] message)
-        //private static string[] FindKeyForColumn(string [] message)
         {
             string LikelyKey = "";
             char[] arr = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
@@ -149,30 +128,6 @@ namespace NetworkSecuritySuite
             }
             return LikelyKey.ToUpper();
         }
-            //string[] LikelyKey = new string[3];
-            ////string tempKey;
-            //char[] arr = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-            //double freq, total = 0;
-            //int count = 0;
-            //foreach (string line in message)
-            //{
-            //    freq = FrequencyAnalysis(line);
-            //    if (freq > total)
-            //    {
-            //        total = freq;
-            //        for (int i = 0; i < LikelyKey.Length; i++)
-            //        {
-            //            for (int j = i - 1; j >= 0; j--)
-            //                LikelyKey[j] = LikelyKey[j+1];
-            //            LikelyKey[i] = arr[count].ToString();
-            //        }
-            //    }
-            //    //if (LikelyKey[] == null)
-            //    //    LikelyKey[1] = LikelyKey[0];
-            //    count++;
-        //}
-        //    return LikelyKey;
-        //}
         private static double FrequencyAnalysis(string message)
         {
             double total = 0;
@@ -196,30 +151,13 @@ namespace NetworkSecuritySuite
         }
         public static void FindLikelyKeyLength(string message)
         {
-            //int value = 0;
-            //int temp = value;
-            //for (int j = 2; j < 10; j++) {
-            //    Console.WriteLine("Here is each repeated string of {0} characters. ", j);
-            //    foreach (KeyValuePair<string, int> pair in GetPatterns(message, j))
-            //    {
-            //        if (pair.Value > 1)
-            //        {
-            //            value = message.IndexOf(pair.Key, value);
-            //            Console.Write("{0}: {1} :  ", pair.Key, pair.Value);
-            //            for (int i = 0; i < pair.Value; i++)
-            //            {
-            //                Console.Write(value + " ");
-            //                value = message.IndexOf(pair.Key, value + 1);
-            //            }
-            //            value = 0;
-            //            Console.WriteLine();
-            //        }
-            //    }
-            //}
             List <int> value = new List<int>();
+            List<int> factors = new List<int>();
+            List<int> totalFactors = new List<int>();
+            List<KeyValuePair<int, int>> totalFactorsRefined = new List<KeyValuePair<int, int>>();
             int count = -1;
             int temp = 0;
-            for (int j = 2; j < 10; j++)
+            for (int j = 2; j <= 10; j++)
             {
                 Console.WriteLine("Here is each repeated string of {0} characters. ", j);
                 foreach (KeyValuePair<string, int> pair in GetPatterns(message, j))
@@ -238,15 +176,71 @@ namespace NetworkSecuritySuite
                         count = -1;
                         value.ForEach(c => Console.Write(c + " "));
                         Console.Write(" | ");
-                        GetDifference(value);
+                        //totalFactors.UnionWith(GetDifference(value));
+                        factors = GetDifference(value).ToList();
+                        totalFactors.AddRange(factors);
                         Console.WriteLine();
                     }
                     value.Clear();
                 }
             }
+            totalFactorsRefined.AddRange(GetOccurences(totalFactors));
+            Console.WriteLine();
+            List<int> highestFactors = GetHighFactors(totalFactorsRefined, 10);
+            Console.Write("The most likely key lengths are: ");
+            foreach(int fac in highestFactors)
+            {
+                Console.Write(fac + " ");
+            }
+            Console.WriteLine();
         }
 
-        private static IEnumerable<KeyValuePair<string, int>> GetPatterns(string value, int blockLength)
+        private static List<int> GetHighFactors(List<KeyValuePair<int, int>> totalFactorsRefined, int numFacts)
+        {
+            List<int> HighFacs = new List<int>(numFacts);
+            //KeyValuePair<int, int> [] tempList = new KeyValuePair<int, int> [numFacts];
+            //KeyValuePair<int, int> temp = new KeyValuePair<int, int>();
+            //foreach (KeyValuePair<int, int> pair in totalFactorsRefined)
+            //{
+            //    //for (int i = 0; i < numFacts; i++)
+            //    //{
+            //    //    if (pair.Value > tempList[i].Value)
+            //    //    {
+            //    //        for(int j = i+ 1; j < numFacts-1; j++)
+            //    //        {
+            //    //            temp= tempList[j];
+            //    //            tempList[j+ 1] = temp;
+            //    //        }
+            //    //        tempList[i] = pair;
+            //    //    }
+            //    //}
+            //}
+            HighFacs = (from pair in totalFactorsRefined
+                        orderby pair.Value descending
+                        select pair.Key).ToList();
+            HighFacs.RemoveRange(numFacts, HighFacs.Count - numFacts);
+            return HighFacs;
+        }
+
+        private static IEnumerable<KeyValuePair<int, int>> GetOccurences(List<int> newFactors)
+        {
+            int count = 0;
+            List<int> throwAwayList = new List<int>();
+            foreach(int f in newFactors)
+            {
+                for (int i = 0; i < newFactors.Count; i++)
+                {
+                    if (newFactors[i] == f )
+                        count++;
+                }
+                if(!throwAwayList.Contains(f))
+                    yield return new KeyValuePair<int, int>(f, count);
+                throwAwayList.Add(f);
+                count = 0;
+            }
+        }
+
+        private static IEnumerable<KeyValuePair<string, int>> GetPatterns(string value, int blockLength)//TODO: MAKE ENGLISH/ SOMETHING THAT LOOKS LIKE JUSTIN AND MIKE WROTE
         {
             string currentBlock = string.Empty;
             IList<string> list = new List<string>();
@@ -264,7 +258,7 @@ namespace NetworkSecuritySuite
                 }
             }
         }
-        private static void GetDifference(List <int> arr)
+        private static IEnumerable<int> GetDifference(List <int> arr)
         {
             int temp;
             HashSet<int> commonFactors = new HashSet<int>();
@@ -279,8 +273,9 @@ namespace NetworkSecuritySuite
             {
                 Console.Write(num + " ");
             }
+            return commonFactors;
         }
-        private static HashSet<int> GetFactors(int value)
+        private static HashSet<int> GetFactors(int value) 
         {
             int temp = 1;
             HashSet<int> factors = new HashSet<int>();
