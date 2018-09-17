@@ -12,10 +12,9 @@ namespace NetworkSecuritySuite
         {
             Menu menu = new Menu();
             string message = "SWUOEFQEKRYHHQYDSBGETAEVSUWAPKWPDKEHTRRPSCAPMFKAUMGCBWXUWETEZDGESFCAULAEDGWAVNCFMXLFMFVWTMLTAUSFCEVFSAAPGWPCESMCTUFMXLFEOPLNWWIADSFTCQQXDRVXZTDAMFVTCOWDRFIJHGKZWDRFIJHCQSHTRCXWPCVEDDNGWGAVGIIJAVMGCSCRSAYBISCEYTJDBNIEEIVGZBAPYJTPTSYGAOEUDMRYLTRESGZAVEKIYOISAFKKZIEHJARIGRLAYFMWVANPSCTNCKEEEMSAIBELXOPMKUOTMFHEEXKGODIJIAJIACLGMF";
-            //Output.DisplayText(message, 5);
             Crypt.FindLikelyKeyLength(message);
+            menu.DisplayHelp();
             string choice = menu.GetChoice();
-            //Console.WriteLine("This is actually a test boi");
             while(choice != "exit")
             {
                choice = menu.GetChoice();

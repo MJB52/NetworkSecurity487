@@ -126,7 +126,7 @@ namespace NetworkSecuritySuite
             }
             else
             {
-                string message = GetMessage(flag);
+                string message = FileHandler.FileRead(GetMessage(flag));
                 Output.DisplayText(message);
             }
         }
