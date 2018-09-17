@@ -217,7 +217,7 @@ namespace NetworkSecuritySuite
                 type = key;
             else
                 type = display;
-            Console.Write("Enter the text to be {0}: ", type);
+            Console.Write("Enter the block of text to be {0}: ", type);
             return Console.ReadLine();
         }
     }

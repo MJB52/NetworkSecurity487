@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 /// <summary>
 /// NAMES: Justin Glenn and Michael Bauer
 /// Class Description: this class is responsible for encrypting, decrypting, and finding IoC of a block of text. 
@@ -192,7 +193,72 @@ namespace NetworkSecuritySuite
             }
             return columns;
         }
-        public static int[] ConvertToInt(string message)
+        public static void FindLikelyKeyLength(string message)
+        {
+            //int value = 0;
+            //int temp = value;
+            //for (int j = 2; j < 10; j++) {
+            //    Console.WriteLine("Here is each repeated string of {0} characters. ", j);
+            //    foreach (KeyValuePair<string, int> pair in GetPatterns(message, j))
+            //    {
+            //        if (pair.Value > 1)
+            //        {
+            //            value = message.IndexOf(pair.Key, value);
+            //            Console.Write("{0}: {1} :  ", pair.Key, pair.Value);
+            //            for (int i = 0; i < pair.Value; i++)
+            //            {
+            //                Console.Write(value + " ");
+            //                value = message.IndexOf(pair.Key, value + 1);
+            //            }
+            //            value = 0;
+            //            Console.WriteLine();
+            //        }
+            //    }
+            //}
+            List <int> value = new List<int>();
+            int count = 0;
+            for (int j = 2; j < 10; j++)
+            {
+                Console.WriteLine("Here is each repeated string of {0} characters. ", j);
+                foreach (KeyValuePair<string, int> pair in GetPatterns(message, j))
+                {
+                    if (pair.Value > 1)
+                    {
+                        count = message.IndexOf(pair.Key, count);
+                        value.Add(count);
+                        Console.Write("{0}: {1} :  ", pair.Key, pair.Value);
+                        for (int i = 0; i < pair.Value; i++)
+                        {
+                            count = message.IndexOf(pair.Key, count);
+                            value.Add(count);
+                        }
+                        count = 0;
+                        Console.Write(value + " ");
+                        Console.WriteLine();
+                    }
+                }
+            }
+        }
+
+        private static IEnumerable<KeyValuePair<string, int>> GetPatterns(string value, int blockLength)
+        {
+            string currentBlock = string.Empty;
+            IList<string> list = new List<string>();
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (i + blockLength <= value.Length)
+                {
+                    currentBlock = value.Substring(i, blockLength);
+                    if (!list.Contains(currentBlock))
+                    {
+                        list.Add(currentBlock);
+                        MatchCollection match = Regex.Matches(value, currentBlock);
+                        yield return new KeyValuePair<string, int>(currentBlock, match.Count);
+                    }
+                }
+            }
+        }
+    public static int[] ConvertToInt(string message)
         {
             int[] messageInInt = new int[message.Length];
             for (int i = 0; i < message.Length; i++)
