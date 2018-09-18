@@ -92,27 +92,27 @@ namespace NetworkSecuritySuite
             }
             else if (line.Length == 2)
             {
-                Console.Write("Would you like to specify a key length(1) or let the program generate one(2)? ");
-                choice = Console.ReadLine();
-                if (choice == "1")
-                {
+                //Console.Write("Would you like to specify a key length(1) or let the program generate one(2)? ");
+                //choice = Console.ReadLine();
+                //if (choice == "1")
+                //{
                     Console.Write("Enter a key length to be used for suggesting keys: ");
                     keyLength = Convert.ToInt32(Console.ReadLine());
-                }
-                else
-                    keyLength = 5; //TODO: REALLY DO THIS: Change to "GetSuggestedKeyLength" when we get it implemented;
+                //}
+                //else
+                  //  keyLength = 5; //TODO: REALLY DO THIS: Change to "GetSuggestedKeyLength" when we get it implemented;
                 Crypt.GetSuggestedKey(FileHandler.FileRead(line[1]), keyLength);
             }
             else {
-                Console.Write("Would you like to specify a key length(1) or let the program generate one(2)? ");
-                choice = Console.ReadLine();
-                if (choice == "1")
-                {
+                //Console.Write("Would you like to specify a key length(1) or let the program generate one(2)? ");
+                //choice = Console.ReadLine();
+                //if (choice == "1")
+                //{
                     Console.Write("Enter a key length to be used for suggesting keys: ");
                     keyLength = Convert.ToInt32(Console.ReadLine());
-                }
-                else
-                    keyLength = 5; //TODO: REALLY DO THIS: Change to "GetSuggestedKeyLength" when we get it implemented;
+                //}
+                //else
+                    //keyLength = 5; //TODO: REALLY DO THIS: Change to "GetSuggestedKeyLength" when we get it implemented;
                 Crypt.GetSuggestedKey(GetMessage(flag), keyLength);
                 }
         }
@@ -146,8 +146,8 @@ namespace NetworkSecuritySuite
             }
             else
             {
-                message = GetMessage(flag);
-                key = GetKey(flag);
+                message = FileHandler.FileRead(line[1]);
+                key = FileHandler.FileRead(line[2]);
             }
             if (message != null && key != null)
                 Crypt.Encrypt(message, key).DisplayBlock();
@@ -170,8 +170,8 @@ namespace NetworkSecuritySuite
             }
             else
             {
-                message = GetMessage(flag);
-                key = GetKey(flag);
+                message = FileHandler.FileRead(line[2]);
+                key = FileHandler.FileRead(line[3]);
             }
             Crypt.Decrypt(message, key).DisplayBlock();
         }

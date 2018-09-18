@@ -48,11 +48,15 @@ namespace NetworkSecuritySuite
                     i += width;
                     chunk = 0;
                     Console.Write(" ");
+                    if (Console.CursorLeft == 160)
+                    {
+                        Console.WriteLine();
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("There was an error: " + ex.Message);
+                //Console.WriteLine("There was an error: " + ex.Message);
             }
         }
         static public void DisplayBlock(this string value)
@@ -65,16 +69,16 @@ namespace NetworkSecuritySuite
             char[] chars = value.ToCharArray();
             int i = 0, j = 0, width = 0, chunk = 0;
 
-            Console.Write("Would you like to use the assumed keylength(1), give your own keylength(2): ");
-            int choice = Int32.Parse(Console.ReadLine());
+            //Console.Write("Would you like to use the assumed keylength(1), give your own keylength(2): ");
+            //int choice = Int32.Parse(Console.ReadLine());
 
-            if (choice == 1)
-                width = keylength;
-            else if (choice == 2)
-            {
-                Console.WriteLine("What is your specified column width: ");
+            //if (choice == 1)
+            //    width = keylength;
+            //else if (choice == 2)
+            //{
+                Console.WriteLine("What is your specified keylength: ");
                 width = Int32.Parse(Console.ReadLine());
-            }
+            //}
             char[] key = new char[width];
 
             while (i < width)
