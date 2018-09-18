@@ -14,6 +14,7 @@ namespace NetworkSecuritySuite
         //write string to file given name not implemented yet but maybe will be used in future..if not - remove
         public static void FileWrite(string message, string fileName)
         {
+            throw new NotImplementedException("Method not implemented");
 
         }
         //read string from file given name
