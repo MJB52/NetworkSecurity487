@@ -33,7 +33,6 @@ namespace NetworkSecuritySuite
             {
                 if (keyLenCount > key.Length - 1)
                     keyLenCount = 0;
-                // storeLetter = (message[i] - 97) - (key[keyLenCount] - 97); //subtract key from cipher  
                 storeLetter = charMessage[i] - charKey[keyLenCount];
                 if (storeLetter < 0)
                     storeLetter += 26;      // sometimes storeLetter could be less than zero..in this case all that needs to be done is add 26
@@ -58,7 +57,6 @@ namespace NetworkSecuritySuite
                 {
                     keyLenCount = 0;
                 }
-                //storeLetter = (message[i] - 97) + (key[keyLenCount] - 97); //add key to plaintext 
                 storeLetter = charMessage[i] + charKey[keyLenCount];
                 if (storeLetter > 25)
                 {
@@ -94,7 +92,7 @@ namespace NetworkSecuritySuite
         public static void GetSuggestedKey(string CipherText, int KeyLength)
         {
             int count = 0;
-            string key = "";
+            string key = string.Empty;
             string[] column = CreateColumns(CipherText, KeyLength); //gets ciphertext into specified columns
             string[] decrypted = new string[26];        //holds each decrypted line 
             foreach (string line in column)
@@ -112,7 +110,7 @@ namespace NetworkSecuritySuite
         //each line contains a plaintext message decrypted using each letter of alphabet
         private static string FindKeyForColumn(string[] message)
         {
-            string LikelyKey = "";
+            string LikelyKey = string.Empty;
             char[] arr = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
             double freq, total = 0;
             int count = 0;
@@ -301,7 +299,7 @@ namespace NetworkSecuritySuite
         }
         public static string ConvertToString(int [] intMessage)
         {
-            string message = "";
+            string message = string.Empty;
             for(int i = 0; i< intMessage.Length; i++)
             {
                 message += (char)(intMessage[i] + 97);

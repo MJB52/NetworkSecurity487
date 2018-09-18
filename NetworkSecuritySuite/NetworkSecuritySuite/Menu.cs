@@ -133,7 +133,7 @@ namespace NetworkSecuritySuite
         public void HandleDisplay(string [] line) //TODO: discuss what we want user to pass in..file name, filename+ keylength? or not since we ask for it already?
                                                   //       maybe just allow filename or nothing 
         {
-            string flag = "d";
+            string flag = "di";
             if(line.Length == 2)
             {
                 Output.DisplayText(FileHandler.FileRead(line[1]));

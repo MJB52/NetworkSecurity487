@@ -10,7 +10,7 @@ namespace NetworkSecuritySuite
     {
         static void Main()
         {
-            Console.SetWindowSize(Console.WindowWidth + 50, Console.WindowHeight);
+            Console.SetWindowSize(170, Console.WindowHeight);
             Menu menu = new Menu();
             menu.DisplayHelp();
             string choice = menu.GetChoice();

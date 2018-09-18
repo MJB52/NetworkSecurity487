@@ -19,7 +19,7 @@ namespace NetworkSecuritySuite
         //read string from file given name
         public static string FileRead(string fileName)
         {
-            string fileContents = "";
+            string fileContents = string.Empty;
             fileName = @"../../../" + fileName;
             if (ValidateFile(fileName))
             {
