@@ -10,9 +10,8 @@ namespace NetworkSecuritySuite
     {
         static void Main()
         {
+            Console.SetWindowSize(Console.WindowWidth + 50, Console.WindowHeight);
             Menu menu = new Menu();
-            string message = "SWUOEFQEKRYHHQYDSBGETAEVSUWAPKWPDKEHTRRPSCAPMFKAUMGCBWXUWETEZDGESFCAULAEDGWAVNCFMXLFMFVWTMLTAUSFCEVFSAAPGWPCESMCTUFMXLFEOPLNWWIADSFTCQQXDRVXZTDAMFVTCOWDRFIJHGKZWDRFIJHCQSHTRCXWPCVEDDNGWGAVGIIJAVMGCSCRSAYBISCEYTJDBNIEEIVGZBAPYJTPTSYGAOEUDMRYLTRESGZAVEKIYOISAFKKZIEHJARIGRLAYFMWVANPSCTNCKEEEMSAIBELXOPMKUOTMFHEEXKGODIJIAJIACLGMF";
-            Crypt.FindLikelyKeyLength(message);
             menu.DisplayHelp();
             string choice = menu.GetChoice();
             while(choice != "exit")

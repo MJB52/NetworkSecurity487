@@ -17,10 +17,10 @@ namespace NetworkSecuritySuite
     {
         enum Lookup
         {
-            a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z
+            a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
         }
-       //                                                    a     b     c     d      e     f    g     h     i     j   k    l     m     n     o     p     q     r    s     t     u      v    w    x     y     z    
-        private static readonly double[] FrequencyLookup = { 8.12, 1.49, 2.71, 4.32, 12.02, 2.3, 2.03, 5.92, 7.31, .1, .69, 3.98, 2.61, 6.95, 7.68, 1.82, .11, 6.02, 6.28, 9.10, 2.88, 1.11, 2.09, .17, 2.11, .07};
+        //                                                    a     b     c     d      e     f    g     h     i     j   k    l     m     n     o     p     q     r    s     t     u      v    w    x     y     z    
+        private static readonly double[] FrequencyLookup = { 8.12, 1.49, 2.71, 4.32, 12.02, 2.3, 2.03, 5.92, 7.31, .1, .69, 3.98, 2.61, 6.95, 7.68, 1.82, .11, 6.02, 6.28, 9.10, 2.88, 1.11, 2.09, .17, 2.11, .07 };
         //this ^^ contains frequency for each letter in english language
         public static string Decrypt(string message, string key)
         {
@@ -47,12 +47,12 @@ namespace NetworkSecuritySuite
         //encyrypt is very similar to decrypt with the exception that it adds the message and the key and then is modded by 26
         public static string Encrypt(string message, string key)
         {
-            int [] charMessage = ConvertToInt(message.ToLower());
-            int [] charKey = ConvertToInt(key.ToLower());
+            int[] charMessage = ConvertToInt(message.ToLower());
+            int[] charKey = ConvertToInt(key.ToLower());
             int[] EncryptedMessage = new int[message.Length];
             int keyLenCount = 0;
             int storeLetter = 0;
-            for(int i = 0; i < message.Length; i++)
+            for (int i = 0; i < message.Length; i++)
             {
                 if (keyLenCount > key.Length - 1)
                 {
@@ -77,18 +77,18 @@ namespace NetworkSecuritySuite
             //converttoint -> 
             cipherText = cipherText.ToLowerInvariant();
             int[] message = ConvertToInt(cipherText);
-            
+
             //Lookup letter;
-            for(int i = 0; i < message.Length; i++)
+            for (int i = 0; i < message.Length; i++)
             {
                 letterCounter[message[i]]++;    //since message is an int array used like a char array we can actually use message to index our counter
             }
-            foreach(int instance in letterCounter)
+            foreach (int instance in letterCounter)
             {
-                total += instance * (instance - 1);     
+                total += instance * (instance - 1);
             }
             return total / (cipherText.Length * (cipherText.Length - 1));
-            
+
         }
 
         public static void GetSuggestedKey(string CipherText, int KeyLength)
@@ -132,17 +132,17 @@ namespace NetworkSecuritySuite
         {
             double total = 0;
             int[] IntMessage = ConvertToInt(message);
-            foreach(int letter in IntMessage)
+            foreach (int letter in IntMessage)
             {
                 total += FrequencyLookup[letter];
             }
-            return total; 
+            return total;
         }
-        public static string [] CreateColumns(string CipherText, int NumColumns)
+        public static string[] CreateColumns(string CipherText, int NumColumns)
         {
             string[] columns = new string[NumColumns];
             int index;
-            for(int i = 0; i < CipherText.Length; i++)
+            for (int i = 0; i < CipherText.Length; i++)
             {
                 index = i % NumColumns;
                 columns[index] += CipherText[i].ToString();
@@ -151,44 +151,52 @@ namespace NetworkSecuritySuite
         }
         public static void FindLikelyKeyLength(string message)
         {
-            List <int> value = new List<int>();
+            List<int> value = new List<int>();
             List<int> factors = new List<int>();
             List<int> totalFactors = new List<int>();
             List<KeyValuePair<int, int>> totalFactorsRefined = new List<KeyValuePair<int, int>>();
+            List<KeyValuePair<string, int>> Repeats = new List<KeyValuePair<string, int>>();
+            string buffer = string.Empty;
+            int bufferCount = 0;
             int count = -1;
             int temp = 0;
-            for (int j = 2; j <= 10; j++)
+            for (int j = 10; j >= 2; j--)
             {
-                Console.WriteLine("Here is each repeated string of {0} characters. ", j);
-                foreach (KeyValuePair<string, int> pair in GetPatterns(message, j))
+                Repeats.AddRange(GetPatterns(message, j).OrderBy(c => c.Value).ToList());
+            }
+            Console.WriteLine("{0,-11}|{1,-7}|{2,-30}|{3,-23}|{4,-20}", "String", "Count", "Location", "Spacing", "Factors");
+            foreach (KeyValuePair<string, int> pair in Repeats)
+            {
+                if (pair.Value > 1)
                 {
-                    if (pair.Value > 1)
+                    for (int i = 0; i < pair.Value; i++)
                     {
-                        //count = message.IndexOf(pair.Key, count);
-                        //value.Add(count);
-                        Console.Write("{0}: {1} :  ", pair.Key, pair.Value);
-                        for (int i = 0; i < pair.Value; i++)
-                        {
-                            temp = message.IndexOf(pair.Key, count +1 );
-                            count = temp;
-                            value.Add(count);
-                        }
-                        count = -1;
-                        value.ForEach(c => Console.Write(c + " "));
-                        Console.Write(" | ");
-                        //totalFactors.UnionWith(GetDifference(value));
-                        factors = GetDifference(value).ToList();
-                        totalFactors.AddRange(factors);
-                        Console.WriteLine();
+                        temp = message.IndexOf(pair.Key, count + 1);
+                        count = temp;
+                        value.Add(count);
                     }
-                    value.Clear();
+                    count = -1;
+                    Console.Write("{0,-11}|{1,-7}|", pair.Key, pair.Value);
+                    foreach (int c in value)
+                    {
+                        Console.Write(c + " ");
+                        bufferCount += (c + " ").ToString().Length;
+                    }
+                    buffer = string.Concat(Enumerable.Repeat(" ", 30 - bufferCount));
+                    Console.Write(buffer + "|");
+                    buffer = string.Empty;
+                    bufferCount = 0;
+                    factors = GetDifference(value).ToList();
+                    totalFactors.AddRange(factors);
+                    Console.WriteLine();
                 }
+                value.Clear();
             }
             totalFactorsRefined.AddRange(GetOccurences(totalFactors));
             Console.WriteLine();
             List<int> highestFactors = GetHighFactors(totalFactorsRefined, 10);
             Console.Write("The most likely key lengths are: ");
-            foreach(int fac in highestFactors)
+            foreach (int fac in highestFactors)
             {
                 Console.Write(fac + " ");
             }
@@ -198,26 +206,7 @@ namespace NetworkSecuritySuite
         private static List<int> GetHighFactors(List<KeyValuePair<int, int>> totalFactorsRefined, int numFacts)
         {
             List<int> HighFacs = new List<int>(numFacts);
-            //KeyValuePair<int, int> [] tempList = new KeyValuePair<int, int> [numFacts];
-            //KeyValuePair<int, int> temp = new KeyValuePair<int, int>();
-            //foreach (KeyValuePair<int, int> pair in totalFactorsRefined)
-            //{
-            //    //for (int i = 0; i < numFacts; i++)
-            //    //{
-            //    //    if (pair.Value > tempList[i].Value)
-            //    //    {
-            //    //        for(int j = i+ 1; j < numFacts-1; j++)
-            //    //        {
-            //    //            temp= tempList[j];
-            //    //            tempList[j+ 1] = temp;
-            //    //        }
-            //    //        tempList[i] = pair;
-            //    //    }
-            //    //}
-            //}
-            HighFacs = (from pair in totalFactorsRefined
-                        orderby pair.Value descending
-                        select pair.Key).ToList();
+            HighFacs = totalFactorsRefined.OrderByDescending(c => c.Value).Select(c => c.Key).ToList();
             HighFacs.RemoveRange(numFacts, HighFacs.Count - numFacts);
             return HighFacs;
         }
@@ -226,24 +215,26 @@ namespace NetworkSecuritySuite
         {
             int count = 0;
             List<int> throwAwayList = new List<int>();
-            foreach(int f in newFactors)
+            foreach (int f in newFactors)
             {
                 for (int i = 0; i < newFactors.Count; i++)
                 {
-                    if (newFactors[i] == f )
+                    if (newFactors[i] == f)
                         count++;
                 }
-                if(!throwAwayList.Contains(f))
+                if (!throwAwayList.Contains(f))
                     yield return new KeyValuePair<int, int>(f, count);
                 throwAwayList.Add(f);
                 count = 0;
             }
         }
 
-        private static IEnumerable<KeyValuePair<string, int>> GetPatterns(string value, int blockLength)//TODO: MAKE ENGLISH/ SOMETHING THAT LOOKS LIKE JUSTIN AND MIKE WROTE
+        private static IEnumerable<KeyValuePair<string, int>> GetPatterns(string value, int blockLength)
         {
             string currentBlock = string.Empty;
-            IList<string> list = new List<string>();
+            string tempBlock = string.Empty;
+            int count = 0;
+            List<string> list = new List<string>();
             for (int i = 0; i < value.Length; i++)
             {
                 if (i + blockLength <= value.Length)
@@ -252,24 +243,36 @@ namespace NetworkSecuritySuite
                     if (!list.Contains(currentBlock))
                     {
                         list.Add(currentBlock);
-                        MatchCollection match = Regex.Matches(value, currentBlock);
-                        yield return new KeyValuePair<string, int>(currentBlock, match.Count);
+                        for (int j = 0; j <= value.Length - blockLength; j++)
+                        {
+                            tempBlock = value.Substring(j, blockLength);
+                            if (currentBlock == tempBlock)
+                                count++;
+                        }
+                        yield return new KeyValuePair<string, int>(currentBlock, count);
                     }
+                    count = 0;
                 }
             }
         }
         private static IEnumerable<int> GetDifference(List <int> arr)
         {
             int temp;
+            string buffer = string.Empty;
+            int bufferCounter = 0;
             HashSet<int> commonFactors = new HashSet<int>();
             for(int i = 0; i < arr.Count - 1; i++)
             {
                 temp = arr[i + 1] - arr[i];
                 Console.Write(temp + " ");
+                bufferCounter += (temp + " ").ToString().Length;
                 commonFactors.UnionWith(GetFactors(temp));
             }
-            Console.Write(" | ");
-            foreach(int num in commonFactors)
+            buffer = string.Concat(Enumerable.Repeat(" ", 23 - bufferCounter));
+            Console.Write(buffer + "|");
+            buffer = string.Empty;
+            bufferCounter = 0;
+            foreach (int num in commonFactors)
             {
                 Console.Write(num + " ");
             }
