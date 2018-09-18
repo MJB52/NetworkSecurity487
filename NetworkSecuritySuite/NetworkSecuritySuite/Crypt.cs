@@ -169,7 +169,7 @@ namespace NetworkSecuritySuite
                 {
                     for (int i = 0; i < pair.Value; i++)
                     {
-                        temp = message.IndexOf(pair.Key, count + 1);//gets locations of each occurrence 
+                        temp = message.IndexOf(pair.Key, count + 1); //gets locations of each occurrence 
                         count = temp;
                         value.Add(count);
                     }
@@ -183,7 +183,7 @@ namespace NetworkSecuritySuite
                             Console.Write(c + " ");
                             bufferCount += (c + " ").ToString().Length;
                         }
-                        buffer = string.Concat(Enumerable.Repeat(" ", 30 - bufferCount));//do this to make things look nice.." " gets repeated 30 - buffercount times
+                        buffer = string.Concat(Enumerable.Repeat(" ", 30 - bufferCount)); //do this to make things look nice.." " gets repeated 30 - buffercount times
                         Console.Write(buffer + "|");
                         buffer = string.Empty;
                         bufferCount = 0;
@@ -260,7 +260,7 @@ namespace NetworkSecuritySuite
             }
         }
         //find the difference between two factors..returns hashset
-        private static IEnumerable<int> GetDifference(List <int> arr, int outputFlag)//output flag used to only print higher values
+        private static IEnumerable<int> GetDifference(List <int> arr, int outputFlag) //output flag used to only print higher values
         {
             int temp;
             string buffer = string.Empty;
@@ -274,7 +274,7 @@ namespace NetworkSecuritySuite
                     Console.Write(temp + " ");
                     bufferCounter += (temp + " ").ToString().Length;
                 }
-                commonFactors.UnionWith(GetFactors(temp));//adds new values not repeating values
+                commonFactors.UnionWith(GetFactors(temp)); //adds new values not repeating values
             }
             if (outputFlag > 2)
             {
