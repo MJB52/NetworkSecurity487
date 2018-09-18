@@ -10,6 +10,7 @@ namespace NetworkSecuritySuite
 {
     public static class Output
     {
+        //basically a menu system for displaying text
         static public void DisplayText(string message, int keylength = 5)//added default value for now until we have suggested keylength implemented
         {
             Console.Write("Would you like to display a block of text(1), display chunks of speicific width(2), or display columns with ciphertext and plaintext(3): ");
@@ -28,6 +29,7 @@ namespace NetworkSecuritySuite
                 message.DisplayPartialColumns(keylength);
             }
         }
+        //displays block in columns
         static public void DisplayFormattedColumns(this string value)
         {
             char[] chars = value.ToCharArray();
@@ -60,11 +62,13 @@ namespace NetworkSecuritySuite
                 Console.WriteLine("There was an error: " + ex.Message);
             }
         }
+
+        //displays text as a paragraph
         static public void DisplayBlock(this string value)
         {
             Console.WriteLine(value);
         }
-
+        //display string of text in columns specified by user..can display cipher and plain text
         static public void DisplayPartialColumns(this string value, int keylength) 
         {
             char[] chars = value.ToCharArray();

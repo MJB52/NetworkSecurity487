@@ -169,12 +169,12 @@ namespace NetworkSecuritySuite
                 {
                     for (int i = 0; i < pair.Value; i++)
                     {
-                        temp = message.IndexOf(pair.Key, count + 1);
+                        temp = message.IndexOf(pair.Key, count + 1); //gets locations of each occurrence 
                         count = temp;
                         value.Add(count);
                     }
                     count = -1;
-                    if (pair.Value > 2)
+                    if (pair.Value > 2) //output flag..gotta have more than 2 occurences for it to show up
                     {
                         Console.WriteLine();
                         Console.Write("{0,-11}|{1,-7}|", pair.Key, pair.Value);
@@ -183,29 +183,30 @@ namespace NetworkSecuritySuite
                             Console.Write(c + " ");
                             bufferCount += (c + " ").ToString().Length;
                         }
-                        buffer = string.Concat(Enumerable.Repeat(" ", 30 - bufferCount));
+                        buffer = string.Concat(Enumerable.Repeat(" ", 30 - bufferCount)); //do this to make things look nice.." " gets repeated 30 - buffercount times
                         Console.Write(buffer + "|");
                         buffer = string.Empty;
                         bufferCount = 0;
                     }
-                    factors = GetDifference(value, pair.Value).ToList();
+                    factors = GetDifference(value, pair.Value).ToList(); //
                     totalFactors.AddRange(factors);
                 }
                 value.Clear();
             }
             totalFactorsRefined.AddRange(GetOccurences(totalFactors));
             Console.WriteLine();
-            List<int> highestFactors = GetHighFactors(totalFactorsRefined, 10);
-            Console.WriteLine("{0,-19}{1,-1}", "Likely Key Length", "Likely Key");
             Console.WriteLine("----------------------------------------------------------------------------------");
+            Console.WriteLine("{0,-19}|{1,-1}", "Likely Key Length", "Likely Key");
+            Console.WriteLine("----------------------------------------------------------------------------------");
+            List<int> highestFactors = GetHighFactors(totalFactorsRefined, 10); //gets the 10 highest occurring factors
             foreach (int fac in highestFactors)
             {
-                Console.Write("{0,-19}: ", fac);
+                Console.Write("{0,-19}|", fac);
                 GetSuggestedKey(message, fac);
             }
             Console.WriteLine();
         }
-
+        //gets the X number of common factors that appear most
         private static List<int> GetHighFactors(List<KeyValuePair<int, int>> totalFactorsRefined, int numFacts)
         {
             List<int> HighFacs = new List<int>(numFacts);
@@ -213,7 +214,7 @@ namespace NetworkSecuritySuite
             HighFacs.RemoveRange(numFacts, HighFacs.Count - numFacts);
             return HighFacs;
         }
-
+        //counts the number of times an item appears in a list returns it as key value pair..key being the number and value being how many times it appears
         private static IEnumerable<KeyValuePair<int, int>> GetOccurences(List<int> newFactors)
         {
             int count = 0;
@@ -231,7 +232,7 @@ namespace NetworkSecuritySuite
                 count = 0;
             }
         }
-
+        //counts how many times something appears in a string given a string length
         private static IEnumerable<KeyValuePair<string, int>> GetPatterns(string value, int blockLength)
         {
             string currentBlock = string.Empty;
@@ -258,7 +259,8 @@ namespace NetworkSecuritySuite
                 }
             }
         }
-        private static IEnumerable<int> GetDifference(List <int> arr, int outputFlag)
+        //find the difference between two factors..returns hashset
+        private static IEnumerable<int> GetDifference(List <int> arr, int outputFlag) //output flag used to only print higher values
         {
             int temp;
             string buffer = string.Empty;
@@ -266,13 +268,13 @@ namespace NetworkSecuritySuite
             HashSet<int> commonFactors = new HashSet<int>();
             for(int i = 0; i < arr.Count - 1; i++)
             {
-                temp = arr[i + 1] - arr[i];
+                temp = arr[i + 1] - arr[i];     //difference betwen nth position and n-1th position
                 if (outputFlag > 2)
                 {
                     Console.Write(temp + " ");
                     bufferCounter += (temp + " ").ToString().Length;
                 }
-                commonFactors.UnionWith(GetFactors(temp));
+                commonFactors.UnionWith(GetFactors(temp)); //adds new values not repeating values
             }
             if (outputFlag > 2)
             {
@@ -287,19 +289,21 @@ namespace NetworkSecuritySuite
             }
             return commonFactors;
         }
+        //gets a list of factors from an int..use a hashset to ensure numbers only show up once
         private static HashSet<int> GetFactors(int value) 
         {
             int temp = 1;
             HashSet<int> factors = new HashSet<int>();
             while (temp <= value)
             {
-                if (value % temp == 0 && temp != 1 && temp != value)
+                if (value % temp == 0 && temp != 1 && temp != value)//dont want 1 and value 
                     factors.Add(temp);
                 temp++;
             }
             return factors;
         }
-    public static int[] ConvertToInt(string message)
+        //convert from string to int array
+        public static int[] ConvertToInt(string message)
         {
             int[] messageInInt = new int[message.Length];
             for (int i = 0; i < message.Length; i++)
@@ -308,6 +312,7 @@ namespace NetworkSecuritySuite
             }
             return messageInInt;
         }
+        //convert from int array to string
         public static string ConvertToString(int [] intMessage)
         {
             string message = string.Empty;
