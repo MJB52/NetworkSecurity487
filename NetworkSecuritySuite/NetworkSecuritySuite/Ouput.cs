@@ -40,7 +40,7 @@ namespace NetworkSecuritySuite
             {
                 while (i < value.Length)
                 {
-                    while (chunk < width)
+                    while (chunk < width && i +chunk < value.Length)
                     {
                         Console.Write(chars[i + chunk]);
                         chunk++;
@@ -53,10 +53,11 @@ namespace NetworkSecuritySuite
                         Console.WriteLine();
                     }
                 }
+                Console.WriteLine();
             }
             catch (Exception ex)
             {
-                //Console.WriteLine("There was an error: " + ex.Message);
+                Console.WriteLine("There was an error: " + ex.Message);
             }
         }
         static public void DisplayBlock(this string value)
@@ -92,18 +93,19 @@ namespace NetworkSecuritySuite
             {
                 while (j < value.Length)
                 {
-                    while (chunk < width)
+                    while (chunk < width && j+chunk < value.Length)
                     {
                         if (key[chunk].CompareTo(' ') == 0)
-                            Console.Write("{0} {1, -3}", chars[j + chunk], '_');
+                            Console.Write("{0}->{1, -3} | ", chars[j + chunk], '_');
                         else
-                            Console.Write("{0} {1, -3}", chars[j + chunk], Crypt.Decrypt(chars[j + chunk].ToString(), key[chunk].ToString()));
+                            Console.Write("{0}->{1, -3} | ", chars[j + chunk], Crypt.Decrypt(chars[j + chunk].ToString(), key[chunk].ToString()));
                         chunk++;
                     }
                     j += width;
                     chunk = 0;
                     Console.WriteLine();
                 }
+                Console.WriteLine();
             }
             catch (Exception ex)
             {

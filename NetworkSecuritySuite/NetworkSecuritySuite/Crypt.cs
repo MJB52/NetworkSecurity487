@@ -33,7 +33,6 @@ namespace NetworkSecuritySuite
             {
                 if (keyLenCount > key.Length - 1)
                     keyLenCount = 0;
-                // storeLetter = (message[i] - 97) - (key[keyLenCount] - 97); //subtract key from cipher  
                 storeLetter = charMessage[i] - charKey[keyLenCount];
                 if (storeLetter < 0)
                     storeLetter += 26;      // sometimes storeLetter could be less than zero..in this case all that needs to be done is add 26
@@ -58,7 +57,6 @@ namespace NetworkSecuritySuite
                 {
                     keyLenCount = 0;
                 }
-                //storeLetter = (message[i] - 97) + (key[keyLenCount] - 97); //add key to plaintext 
                 storeLetter = charMessage[i] + charKey[keyLenCount];
                 if (storeLetter > 25)
                 {
@@ -94,7 +92,7 @@ namespace NetworkSecuritySuite
         public static void GetSuggestedKey(string CipherText, int KeyLength)
         {
             int count = 0;
-            string key = "";
+            string key = string.Empty;
             string[] column = CreateColumns(CipherText, KeyLength); //gets ciphertext into specified columns
             string[] decrypted = new string[26];        //holds each decrypted line 
             foreach (string line in column)
@@ -112,7 +110,7 @@ namespace NetworkSecuritySuite
         //each line contains a plaintext message decrypted using each letter of alphabet
         private static string FindKeyForColumn(string[] message)
         {
-            string LikelyKey = "";
+            string LikelyKey = string.Empty;
             char[] arr = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
             double freq, total = 0;
             int count = 0;
@@ -164,7 +162,7 @@ namespace NetworkSecuritySuite
             {
                 Repeats.AddRange(GetPatterns(message, j).OrderBy(c => c.Value).ToList());
             }
-            Console.WriteLine("{0,-11}|{1,-7}|{2,-30}|{3,-23}|{4,-20}", "String", "Count", "Location", "Spacing", "Factors");
+            Console.Write("{0,-11}|{1,-7}|{2,-30}|{3,-23}|{4,-20}", "String", "Count", "Location", "Spacing", "Factors");
             foreach (KeyValuePair<string, int> pair in Repeats)
             {
                 if (pair.Value > 1)
@@ -176,29 +174,34 @@ namespace NetworkSecuritySuite
                         value.Add(count);
                     }
                     count = -1;
-                    Console.Write("{0,-11}|{1,-7}|", pair.Key, pair.Value);
-                    foreach (int c in value)
+                    if (pair.Value > 2)
                     {
-                        Console.Write(c + " ");
-                        bufferCount += (c + " ").ToString().Length;
+                        Console.WriteLine();
+                        Console.Write("{0,-11}|{1,-7}|", pair.Key, pair.Value);
+                        foreach (int c in value)
+                        {
+                            Console.Write(c + " ");
+                            bufferCount += (c + " ").ToString().Length;
+                        }
+                        buffer = string.Concat(Enumerable.Repeat(" ", 30 - bufferCount));
+                        Console.Write(buffer + "|");
+                        buffer = string.Empty;
+                        bufferCount = 0;
                     }
-                    buffer = string.Concat(Enumerable.Repeat(" ", 30 - bufferCount));
-                    Console.Write(buffer + "|");
-                    buffer = string.Empty;
-                    bufferCount = 0;
-                    factors = GetDifference(value).ToList();
+                    factors = GetDifference(value, pair.Value).ToList();
                     totalFactors.AddRange(factors);
-                    Console.WriteLine();
                 }
                 value.Clear();
             }
             totalFactorsRefined.AddRange(GetOccurences(totalFactors));
             Console.WriteLine();
             List<int> highestFactors = GetHighFactors(totalFactorsRefined, 10);
-            Console.Write("The most likely key lengths are: ");
+            Console.WriteLine("{0,-19}{1,-1}", "Likely Key Length", "Likely Key");
+            Console.WriteLine("----------------------------------------------------------------------------------");
             foreach (int fac in highestFactors)
             {
-                Console.Write(fac + " ");
+                Console.Write("{0,-19}: ", fac);
+                GetSuggestedKey(message, fac);
             }
             Console.WriteLine();
         }
@@ -255,7 +258,7 @@ namespace NetworkSecuritySuite
                 }
             }
         }
-        private static IEnumerable<int> GetDifference(List <int> arr)
+        private static IEnumerable<int> GetDifference(List <int> arr, int outputFlag)
         {
             int temp;
             string buffer = string.Empty;
@@ -264,17 +267,23 @@ namespace NetworkSecuritySuite
             for(int i = 0; i < arr.Count - 1; i++)
             {
                 temp = arr[i + 1] - arr[i];
-                Console.Write(temp + " ");
-                bufferCounter += (temp + " ").ToString().Length;
+                if (outputFlag > 2)
+                {
+                    Console.Write(temp + " ");
+                    bufferCounter += (temp + " ").ToString().Length;
+                }
                 commonFactors.UnionWith(GetFactors(temp));
             }
-            buffer = string.Concat(Enumerable.Repeat(" ", 23 - bufferCounter));
-            Console.Write(buffer + "|");
-            buffer = string.Empty;
-            bufferCounter = 0;
-            foreach (int num in commonFactors)
+            if (outputFlag > 2)
             {
-                Console.Write(num + " ");
+                buffer = string.Concat(Enumerable.Repeat(" ", 23 - bufferCounter));
+                Console.Write(buffer + "|");
+                buffer = string.Empty;
+                bufferCounter = 0;
+                foreach (int num in commonFactors)
+                {
+                    Console.Write(num + " ");
+                }
             }
             return commonFactors;
         }
@@ -301,7 +310,7 @@ namespace NetworkSecuritySuite
         }
         public static string ConvertToString(int [] intMessage)
         {
-            string message = "";
+            string message = string.Empty;
             for(int i = 0; i< intMessage.Length; i++)
             {
                 message += (char)(intMessage[i] + 97);
