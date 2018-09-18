@@ -31,13 +31,19 @@ namespace NetworkSecuritySuite
             string decrypt = "encrypt -d";
             string suggestKeys = "keys";
             string display = "display";
+            string keyLength = "keylength";
+            string clear = "clear";
+            string exit = "exit";
             //string help = "help";
             //Display List of Commands
             Console.WriteLine("The valid commands are\n\t{0} |optionally can be followed by a filename" +
                 "              \n\t{1} |optionally can be followed by 2 filenames" +
                 "              \n\t{2} |optionally can be follwed by 2 filenames"  +
                 "              \n\t{3} |optionally can be followed by filename and a keylength" +
-                "              \n\t{4} |optionally can be followed by a filename", ioc, encrypt, decrypt, suggestKeys, display);
+                "              \n\t{4} |optionally can be followed by a filename" +
+                "              \n\t{5} |optionally can be followed by a filename" +
+                "              \n\t{6} | -- command will clear the screen" +
+                "              \n\t{7} | exits program", ioc, encrypt, decrypt, suggestKeys, display, keyLength, clear, exit);
         }
 
         public string ProcessInput(string line)
@@ -67,10 +73,18 @@ namespace NetworkSecuritySuite
                 {
                     HandleDisplay(parsed);
                 }
+                else if(parsed[0].ToLower() == "keylength")
+                {
+                    HandleSuggestKeyLength(parsed);
+                }
+                else if(parsed[0].ToLower() == "clear")
+                {
+                    Console.Clear();
+                }
                 else if (parsed[0].ToLower() == "exit")
                 {
 
-                }
+                }               
                 else
                     DisplayHelp();
                 return parsed[0];
@@ -191,7 +205,16 @@ namespace NetworkSecuritySuite
             }
             Console.WriteLine("Index of Coincedence for data in {0} = {1}",fileName, IoC);
         }
-
+        private void HandleSuggestKeyLength(string [] line)
+        {
+            string flag = "kl";
+            if (line.Length == 1)
+            {
+                Crypt.FindLikelyKeyLength(GetMessage(flag));
+            }
+            else
+                Crypt.FindLikelyKeyLength(FileHandler.FileRead(line[1]));
+        }
         private string GetKey(string flag)
         {
             string type = "encryption";
@@ -208,6 +231,7 @@ namespace NetworkSecuritySuite
             string decrypt = "decrypted";
             string key = "used for finding keys";
             string display = "displayed";
+            string keyLength = "used for finding a suggested key length";
             string type;
             if (flag == "d")
                 type = decrypt;
@@ -215,6 +239,8 @@ namespace NetworkSecuritySuite
                 type = encrypt;
             else if (flag == "k")
                 type = key;
+            else if (flag == "kl")
+                type = keyLength;
             else
                 type = display;
             Console.Write("Enter the block of text to be {0}: ", type);
