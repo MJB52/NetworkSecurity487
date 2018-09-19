@@ -221,7 +221,7 @@ namespace NetworkSecuritySuite
             if (flag == "d")
                 type = "decryption";
             Console.Write("Enter the key to use for {0}: ", type);
-            return Console.ReadLine().ToLower();
+            return Console.ReadLine().ToLower().RemoveNonChars().RemoveWhiteSpace();
 
         }
 
@@ -244,7 +244,7 @@ namespace NetworkSecuritySuite
             else
                 type = display;
             Console.Write("Enter the block of text to be {0}: ", type);
-            return Console.ReadLine();
+            return Console.ReadLine().RemoveNonChars().RemoveWhiteSpace();
         }
     }
 }

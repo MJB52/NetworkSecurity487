@@ -22,6 +22,8 @@ namespace NetworkSecuritySuite
         //                                                    a     b     c     d      e     f    g     h     i     j   k    l     m     n     o     p     q     r    s     t     u      v    w    x     y     z    
         private static readonly double[] FrequencyLookup = { 8.12, 1.49, 2.71, 4.32, 12.02, 2.3, 2.03, 5.92, 7.31, .1, .69, 3.98, 2.61, 6.95, 7.68, 1.82, .11, 6.02, 6.28, 9.10, 2.88, 1.11, 2.09, .17, 2.11, .07 };
         //this ^^ contains frequency for each letter in english language
+
+        
         public static string Decrypt(string message, string key)
         {
             int[] charMessage = ConvertToInt(message.ToLower());
