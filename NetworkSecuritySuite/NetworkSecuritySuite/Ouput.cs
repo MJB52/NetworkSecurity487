@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 /// <summary>
 /// NAMES: Justin Glenn and Michael Bauer
-/// Class Description: this class is to output blocks of text in a certain way. currently it is not used
+/// Class Description: this class is to output blocks of text in a certain way. 
 /// This code was developed by Justin Glenn and Michael Bauer and is not copied from an outside source
 /// </summary>
 namespace NetworkSecuritySuite
